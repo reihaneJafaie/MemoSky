@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
+import { QRCodeSVG } from 'qrcode.react'
 
 export default function MakeQRSection() {
   const [roomName, setRoomName] = useState("");
   const [created, setCreated] = useState(false);
-  const [roomId, setRoomId] = useState("");
+  const [roomId, setRoomId] = useState<string>("");
 
   const navigate = useNavigate();
 
@@ -94,7 +95,7 @@ export default function MakeQRSection() {
             <div className="flex flex-col md:flex-row gap-8 items-center">
               <div className="flex-shrink-0">
                 <div className="w-44 h-44 bg-white rounded-2xl border-2 border-purple-100 shadow-inner flex items-center justify-center relative overflow-hidden">
-                  <div className="grid grid-cols-7 gap-0.5 p-3 opacity-80">
+                  {/* <div className="grid grid-cols-7 gap-0.5 p-3 opacity-80">
                     {Array.from({ length: 49 }).map((_, i) => (
                       <div
                         key={i}
@@ -105,13 +106,24 @@ export default function MakeQRSection() {
                         }`}
                       />
                     ))}
-                  </div>
+                  </div> */}
 
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow">
-                      <span className="text-xl">☁️</span>
-                    </div>
-                  </div>
+                  <QRCodeSVG
+  value={`${window.location.origin}/room/${roomId}`}
+  size={160}
+  bgColor="#ffffff"
+  fgColor="#2a1f4f"
+  imageSettings={{
+    src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E☁️%3C/text%3E%3C/svg%3E",
+    x: undefined,
+    y: undefined,
+    height: 30,
+    width: 30,
+    excavate: true,
+  }}
+/>
+
+            
                 </div>
 
                 <p className="text-center text-xs text-purple-400 mt-2 font-medium">
