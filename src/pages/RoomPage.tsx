@@ -1,10 +1,13 @@
 import { useParams } from 'react-router-dom'
 import { useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useLocation } from 'react-router-dom'
 import JSZip from 'jszip' 
 
 export default function RoomPage() {
   const { roomName } = useParams()
+  const location = useLocation()
+  const roomTitle = location.state?.roomName || 'My Sky Room'
   const [images, setImages] = useState<{ url: string; name: string; file: File }[]>([])
   const [dragging, setDragging] = useState(false)
   const [selected, setSelected] = useState<string | null>(null)
@@ -44,7 +47,7 @@ export default function RoomPage() {
       <div className="pt-12 pb-6 text-center">
         <span className="text-4xl">☁️</span>
         <h1 className="font-serif text-3xl md:text-4xl font-bold text-[#2a1f4f] mt-2">
-          {roomName}
+          {roomTitle}
         </h1>
         <p className="text-[#6b5b8a] mt-1 text-sm">{images.length} photo{images.length !== 1 ? 's' : ''}</p>
       </div>
