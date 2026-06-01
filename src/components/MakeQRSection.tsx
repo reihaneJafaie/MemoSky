@@ -1,23 +1,46 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../lib/supabase";
 
 export default function MakeQRSection() {
-  const [roomName, setRoomName] = useState('')
-  const [created, setCreated] = useState(false)
-  const [roomId, setRoomId] = useState('')
+  const [roomName, setRoomName] = useState("");
+  const [created, setCreated] = useState(false);
+  const [roomId, setRoomId] = useState("");
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const createRoom = () => {
-    const id = crypto.randomUUID()
+  const createRoom = async () => {
+    try {
+      const expiresAt = new Date();
+      expiresAt.setDate(expiresAt.getDate() + 7);
 
-    setRoomId(id)
-    setCreated(true)
-  }
+      const { data, error } = await supabase
+        .from("rooms")
+        .insert([
+          {
+            name: roomName,
+            expires_at: expiresAt.toISOString(),
+          },
+        ])
+        .select()
+        .single();
+
+      if (error) {
+        console.error(error);
+        alert("Failed to create room");
+        return;
+      }
+
+      setRoomId(data.id);
+      setCreated(true);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const roomLink = roomId
     ? `memosky.app/room/${roomId}`
-    : 'memosky.app/room/...'
+    : "memosky.app/room/...";
 
   return (
     <section
@@ -59,9 +82,8 @@ export default function MakeQRSection() {
                   className="w-full bg-white/60 border border-purple-200/60 rounded-2xl px-5 py-4 text-[#2a1f4f] placeholder-purple-300 text-base outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-200 transition-all"
                 />
               </div>
-
               <button
-                onClick={createRoom}
+                onClick={async () => await createRoom()}
                 disabled={!roomName.trim()}
                 className="w-full bg-gradient-to-r from-[#9b72cf] to-[#c084fc] text-white font-bold text-base py-4 rounded-2xl shadow-lg shadow-purple-300/40 hover:-translate-y-0.5 hover:shadow-xl transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
               >
@@ -78,8 +100,8 @@ export default function MakeQRSection() {
                         key={i}
                         className={`w-4 h-4 rounded-sm ${
                           Math.random() > 0.4
-                            ? 'bg-[#2a1f4f]'
-                            : 'bg-transparent'
+                            ? "bg-[#2a1f4f]"
+                            : "bg-transparent"
                         }`}
                       />
                     ))}
@@ -115,7 +137,7 @@ export default function MakeQRSection() {
 
                   <div className="flex items-center gap-2 bg-white/70 border border-purple-200/60 rounded-xl px-4 py-3">
                     <span className="text-[#2a1f4f] text-sm font-medium flex-1 truncate">
-                       {roomLink.slice(0,40)}...
+                      {roomLink.slice(0, 40)}...
                     </span>
 
                     <button
@@ -128,11 +150,13 @@ export default function MakeQRSection() {
                 </div>
 
                 <button
-                  onClick={() => navigate(`/room/${roomId}`, {
-  state: {
-    roomName,
-  },
-})}
+                  onClick={() =>
+                    navigate(`/room/${roomId}`, {
+                      state: {
+                        roomName,
+                      },
+                    })
+                  }
                   className="w-full bg-gradient-to-r from-[#9b72cf] to-[#c084fc] text-white font-bold text-sm py-3.5 rounded-xl shadow-md hover:-translate-y-0.5 transition-all duration-200"
                 >
                   Open My Room →
@@ -143,5 +167,5 @@ export default function MakeQRSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }
