@@ -33,7 +33,7 @@ opacity={1}
 
 export default function Hero() {
   return (
-    <section style={{ width: '100vw', height: '100vh' }}>
+    <div style={{ width: '100%', height: '100%' }}>
       <Canvas
         camera={{ position: [0, 0, 10], fov: 60 }}
         style={{ width: '100%', height: '100%' }}
@@ -62,6 +62,6 @@ export default function Hero() {
           autoRotateSpeed={0.3}
         />
       </Canvas>
-    </section>
+    </div>
   )
 }

@@ -1,20 +1,22 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export default function MakeQRSection() {
   const [roomName, setRoomName] = useState('')
   const [created, setCreated] = useState(false)
   const fakeLink = `memosky.app/room/${roomName || 'my-room'}`
+  const navigate = useNavigate()
 
   return (
     <section
       id="qr-section"
-      className="min-h-screen flex items-center justify-center px-6 py-24 relative"
+      className="rounded-t-2xl bg-[#d2c8f7] h-screen flex items-center justify-center px-6 py-24 relative"
     >
       {/* glass card */}
       <div className="relative z-10 w-full max-w-2xl">
 
         {/* header */}
-        <div className="text-center mb-12">
+        <div className="text-center flex flex-col justify-center items-center mb-12">
           <span className="inline-block text-xs font-bold tracking-[4px] uppercase text-purple-400 bg-white/30 backdrop-blur-sm border border-purple-200/40 px-4 py-1.5 rounded-full mb-5">
             Create Your Room
           </span>
@@ -24,7 +26,7 @@ export default function MakeQRSection() {
               Infinite memories.
             </span>
           </h2>
-          <p className="text-[#6b5b8a] mt-4 text-base max-w-sm mx-auto">
+          <p className="text-[#6b5b8a] mt-4 text-center  max-w-sm mx-auto">
             Name your sky room and get a shareable link & QR code instantly.
           </p>
         </div>
@@ -95,16 +97,14 @@ export default function MakeQRSection() {
                   </div>
                 </div>
 
-                <button className="w-full bg-gradient-to-r from-[#9b72cf] to-[#c084fc] text-white font-bold text-sm py-3.5 rounded-xl shadow-md hover:-translate-y-0.5 transition-all duration-200">
+             <button
+                  onClick={() => navigate(`/room/${roomName}`)}  
+                  className="w-full bg-gradient-to-r from-[#9b72cf] to-[#c084fc] text-white font-bold text-sm py-3.5 rounded-xl shadow-md hover:-translate-y-0.5 transition-all duration-200"
+                >
                   Open My Room →
                 </button>
 
-                <button
-                  onClick={() => { setCreated(false); setRoomName('') }}
-                  className="text-xs text-purple-400 hover:text-purple-600 transition-colors text-center"
-                >
-                  Create a different room
-                </button>
+                
               </div>
             </div>
           )}

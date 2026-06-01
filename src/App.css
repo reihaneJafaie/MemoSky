@@ -4,24 +4,12 @@
   box-sizing: border-box;
 } */
 
-body {
-  background: linear-gradient(
-    160deg,
-    #96d5ff 0%,
-    #96cff3 30%,
-    #e0c4f3 65%,
-    #ffbadf 100%
-  );
-  min-height: 100vh;
-  
-  font-family: 'Segoe UI', sans-serif;
+html {
+  scroll-behavior: smooth; /* ✅ */
+  overflow-x: hidden; 
 }
 
-.app {
-  width: 100vw;
-  height: 100vh;
-  position: relative;
-}
+
 
 canvas {
   display: block;
